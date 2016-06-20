@@ -4,6 +4,7 @@ Nada de mais :)
 
 Abraços.
 
-Leonardo Ortiz \n
+Leonardo Ortiz
+
 https://br.linkedin.com/in/leonardooliveiraortiz
 
