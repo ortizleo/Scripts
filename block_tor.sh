@@ -1,5 +1,6 @@
 #!/bin/bash
 #Funcao: Bloquear exit nodes da rede TOR
+#Obs: Fazer ajustes de acordo com necessidade(regras, lista etc)
 #Resp: Leonardo Ortiz
 CHECK_FORWARD=$(iptables -n --list FORWARD | grep BLOCK_TOR)
 DIR_LOG="/DIRETORIO DE LOGS/log/block_tor"
