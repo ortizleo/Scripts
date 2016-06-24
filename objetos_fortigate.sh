@@ -3,6 +3,7 @@
 #Objetivo: Automatizar criacao de objetos no Fortigate com os alertas recebidos por e-mail
 #Uso: Copiar o conteudo dos e-mails e jogar em um arquivo de texto chamado "fw"
 #Problemas: Não consigo colocar o arquivo como parametro, o bash simplesmente não aceita
+#Obs: Fazer ajustes de acordo com necessidade(nome de objetos, diretorios etc)
 
 teste=$1
 
