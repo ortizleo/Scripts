@@ -3,6 +3,7 @@
 #Resp.: Leonardo Ortiz
 #Data: 08/05/2015
 #Obs.: Precisa pacote openldap-clients - LDAP client utilities
+#Obs 2: Fazer ajustes de acordo com necessidade(variaveis, DC, etc)
 #Testado para CentOS
 #Uso: script.sh listadeusuarios
 
