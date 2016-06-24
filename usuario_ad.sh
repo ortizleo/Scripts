@@ -3,6 +3,7 @@
 #Resp.: Leonardo Ortiz
 #Data: 30/04/2014
 #Obs: Precisa do pacote openldap-clients
+#Obs2: Fazer ajustes de acordo com necessidade(variaveis, DC, diretorios etc)
 #Testado no Centos.
 
 if [ -z $1 ]; then
