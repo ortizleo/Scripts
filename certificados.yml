@@ -1,0 +1,15 @@
+---
+- hosts: Certificados
+  become: true
+  tasks:
+    - name: Copiar certificados
+      copy:
+        src: "{{ item }}"
+        dest: /etc/httpd/ssl/
+      with_fileglob:
+         - "/ansible/certificados/ssl/marisolsa.net/*.pem"
+
+    - name: Reiniciar apache
+      service:
+        name: httpd
+        state: restarted
