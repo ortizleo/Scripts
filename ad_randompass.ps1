@@ -1,6 +1,6 @@
-# Script pra definir uma senha randomica para usuários de um .csc (coluna "Conta")
+# Script pra definir uma senha randomica para usuários de um .csv (coluna "Conta" contendo somente o sAMAccountName)
 # Função pra definir senha: https://activedirectoryfaq.com/2017/08/creating-individual-random-passwords/
-# Leonardo
+# Leonardo Ortiz
 
 Import-Csv -Path “c:\temp\users.csv” | ForEach-Object {
 
