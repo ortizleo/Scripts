@@ -1,0 +1,20 @@
+#BASEADO NO https://gist.github.com/ericpardee/aa41fa0b05603d075792c9ce8d4529a0
+
+for bucket in $(aws s3api list-buckets --query "Buckets[].Name" --output table | tail -n +4 | awk '{print $2}') ; do
+echo "Analisando $bucket"
+
+        if [ `aws s3 ls $bucket | tail -n3 | wc -m | awk '{print $1}'` = 0 2> /dev/null ]; then
+
+                aws s3api get-bucket-website --bucket $bucket > /dev/null 2>&1
+                ret=$?
+
+                if [ $ret -ne 0 ]; then
+
+                        echo "$bucket >>>>> Vazio e sem static site"
+                else
+
+                        echo "$bucket >>>>> Vazio mas com static site"
+                fi
+
+        fi
+done
