@@ -1,0 +1,26 @@
+ #FONTE: https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html
+ #ADAPTEI O SCRIPT ORIGINAL
+ 
+ #DEFINE O BUCKUT DE LOG
+ loggingBucket='cp-aws-service-logs-br'
+  
+ #FAZ UM CAT EM UM ARQUIVO COM TODOS OS BUCKETS
+ #TODOS OS BUCKETS E O LOGGINGBUCKUET DEVEM ESTAREM NA MESMA REGIÃO
+  # List buckets in this account
+  buckets="$(cat brs3)"
+
+  # Put bucket logging on each bucket
+  for bucket in $buckets
+      do printf '{
+     "LoggingEnabled": {
+         "TargetBucket": "%s",
+         "TargetPrefix": "%s/"
+          }
+      }' "$loggingBucket" "LogsBucketsS3/$bucket" > logging.json
+      aws s3api put-bucket-logging --bucket $bucket --bucket-logging-status file://logging.json
+      echo "$bucket done"
+  done
+
+  rm logging.json
+
+  echo "Complete"
