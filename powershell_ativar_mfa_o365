@@ -1,0 +1,7 @@
+#Create the StrongAuthenticationRequirement object
+$mf=New-Object -TypeName Microsoft.Online.Administration.StrongAuthenticationRequirement
+$mf.RelyingParty = "*"
+$mf.State = "Enforced"
+$mfa= @($mf)
+
+Import-Csv -Path “C:\Temp\contas.csv” | ForEach-Object {Set-MsolUser -UserPrincipalName $_.’Conta’ -StrongAuthenticationRequirements $mfa}
