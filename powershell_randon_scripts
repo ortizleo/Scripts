@@ -1,0 +1,7 @@
+## Alterar depto com base em CSV
+Install-Module -Name AzureAD
+Connect-AzureAD
+Import-Csv -Path “c:\temp\users.csv” -Delimiter ";" | ForEach-Object {
+Set-AzureADUser -ObjectId $_.’Conta’ -Department $_.'Dpto'
+
+}
