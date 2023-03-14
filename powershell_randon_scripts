@@ -30,3 +30,28 @@ RecipientType= $member.RecipientType
 $i++
 }
 $Result | Export-CSV "C:\\All-Distribution-Group-Members.csv" -NoTypeInformation -Encoding UTF8
+
+
+
+
+## desativar certos Apps
+
+#Get-MsolAccountSku | Select AccountSkuId | Sort AccountSkuId
+
+$LO = New-MsolLicenseOptions -AccountSkuId "reseller-account:ENTERPRISEPACK" -DisabledPlans "EXCHANGE_S_ENTERPRISE", "TEAMS1"
+
+Import-Csv -Path “c:\temp\users_disable.csv” | ForEach-Object {
+
+Write-Output "Processing $_.mail"
+Set-MsolUserLicense -UserPrincipalName $_.'mail' -LicenseOptions $LO
+
+}
+
+
+
+
+
+
+
+
+
