@@ -34,7 +34,7 @@ $Result | Export-CSV "C:\\All-Distribution-Group-Members.csv" -NoTypeInformation
 
 
 
-## desativar certos Apps
+## desativar certos Apps no O365 de acordo com a Licença
 
 #Get-MsolAccountSku | Select AccountSkuId | Sort AccountSkuId
 
@@ -50,6 +50,16 @@ Set-MsolUserLicense -UserPrincipalName $_.'mail' -LicenseOptions $LO
 
 
 
+## Remover licença através de uma lista csv
+Import-Csv -Path “c:\temp\bulk.csv” | ForEach-Object { 
+Write-Output "Processing $_.mail"
+$MsolUser = Get-MsolUser -UserPrincipalName  $_.mail
+
+$AssignedLicenses = $MsolUser.licenses.AccountSkuId
+foreach($License in $AssignedLicenses) {
+    Set-MsolUserLicense -UserPrincipalName  $_.mail -RemoveLicenses $License
+}
+}
 
 
 
