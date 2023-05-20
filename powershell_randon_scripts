@@ -63,5 +63,28 @@ foreach($License in $AssignedLicenses) {
 
 
 
+#Colocar sharepoint em ReadOnly através de uma lista .csv
+# https://www.sharepointdiary.com/2019/02/set-sharepoint-online-site-to-read-only-using-powershell.html
+$AdminCenterURL="https://SITE-admin.sharepoint.com/"
+ 
+#Connect to SharePoint Online
+Connect-SPOService -Url $AdminCenterURL
+
+Import-Csv -Path “c:\temp\sharepoint_ro.csv” | ForEach-Object {
+
+Write-Output "Processing $_.SP"
+
+#PowerShell to set sharepoint online site to read only
+Set-SPOSite -Identity $_.'SP' -LockState ReadOnly
+}
+
+
+#Pegar infos dos Sites no Sharepoint
+Get-SPOSite  | select URl, Title, LockState,LastContentModifiedDate | Format-table
+
+
+
+
+
 
 
