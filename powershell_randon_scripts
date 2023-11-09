@@ -82,7 +82,9 @@ Set-SPOSite -Identity $_.'SP' -LockState ReadOnly
 #Pegar infos dos Sites no Sharepoint
 Get-SPOSite  | select URl, Title, LockState,LastContentModifiedDate | Format-table
 
-
+#Instalar e conectar MSOL
+Install-Module MSOnline
+Connect-MsolService 
 
 
 
