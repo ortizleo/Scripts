@@ -1,4 +1,4 @@
-## Alterar depto com base em CSV
+###########Alterar depto com base em CSV
 Install-Module -Name AzureAD
 Connect-AzureAD
 Import-Csv -Path “c:\temp\users.csv” -Delimiter ";" | ForEach-Object {
@@ -8,7 +8,7 @@ Set-AzureADUser -ObjectId $_.’Conta’ -Department $_.'Dpto'
 
 
 
-## exporta grupos de distribuição com membros
+########### exporta grupos de distribuição com membros
 Install-Module ExchangeOnlineManagement
 Connect-ExchangeOnline
 
@@ -34,7 +34,7 @@ $Result | Export-CSV "C:\\All-Distribution-Group-Members.csv" -NoTypeInformation
 
 
 
-## desativar certos Apps no O365 de acordo com a Licença
+########### desativar certos Apps no O365 de acordo com a Licença
 
 #Get-MsolAccountSku | Select AccountSkuId | Sort AccountSkuId
 
@@ -50,7 +50,7 @@ Set-MsolUserLicense -UserPrincipalName $_.'mail' -LicenseOptions $LO
 
 
 
-## Remover licença através de uma lista csv
+########### Remover licença através de uma lista csv NAO FUNCIONA MAIS EM 24/10/2024 
 Import-Csv -Path “c:\temp\bulk.csv” | ForEach-Object { 
 Write-Output "Processing $_.mail"
 $MsolUser = Get-MsolUser -UserPrincipalName  $_.mail
@@ -61,9 +61,30 @@ foreach($License in $AssignedLicenses) {
 }
 }
 
+###########Remove All User Licenses and disable users from csv (csv with username only)
+
+Connect-MgGraph -Tenant aaa.onmicrosoft.com -Scopes User.ReadWrite.All
+$users = Import-Csv c:\temp\users_o3656_removal.csv
+#$users = Get-MgUser -Filter "Department eq 'Marketing'"
+ 
+foreach ($user in $users) {
+$user = $user.UserPrincipalName + "@aaa.onmicrosoft.com"
+    Write-Host "Processing licenses for user $user"
+    try { $user = Get-MgUser -UserId $user }
+    catch { Write-Host "User $user not found, skipping..." ; continue }
+    Update-Mguser -UserId $user.id -AccountEnabled:$false
+    $SKUs = @(Get-MgUserLicenseDetail -UserId $user.id)
+    if (!$SKUs) { Write-Host "No Licenses found for user $user, skipping..." ; continue }
+ 
+    foreach ($SKU in $SKUs) {
+       Write-host ">>>>>> Removing license from user $user"  
+       Set-MgUserLicense -UserId $user.id -AddLicenses @() -RemoveLicenses $Sku.SkuId
+       
+       }
+}
 
 
-#Colocar sharepoint em ReadOnly através de uma lista .csv
+###########Colocar sharepoint em ReadOnly através de uma lista .csv
 # https://www.sharepointdiary.com/2019/02/set-sharepoint-online-site-to-read-only-using-powershell.html
 $AdminCenterURL="https://SITE-admin.sharepoint.com/"
  
@@ -74,7 +95,7 @@ Import-Csv -Path “c:\temp\sharepoint_ro.csv” | ForEach-Object {
 
 Write-Output "Processing $_.SP"
 
-#PowerShell to set sharepoint online site to read only
+###########PowerShell to set sharepoint online site to read only
 Set-SPOSite -Identity $_.'SP' -LockState ReadOnly
 }
 
@@ -88,5 +109,17 @@ Connect-MsolService
 
 
 
+
+
+###########Bulk add users in sharepoints from csv with "mail;site url"
+##Connection paramaters
+$AdminURL = "https://loftms365-admin.sharepoint.com"
+$CSVFile="c:\temp\sharepoint-focalpoints-01.csv"
+
+#Connect to SharePoint Online
+#Connect-SPOService -url $AdminURL
+ 
+
+Import-Csv $CSVFile | ForEach-Object { Set-SPOUser -LoginName $_.mail -IsSiteCollectionAdmin $true -Site $_.site}
 
 
